@@ -26,12 +26,13 @@ def checkPrice():
 
     price = soup.find(id='priceblock_ourprice').get_text()
     converted_price = eval(price[4:9]) # Number part of price
+    #price = eval(soup.find_all('span', class_='total--sale-price')[0].contents[0])  for span elements
     converted_price = converted_price[0]*1000 + converted_price[1]
 
     if converted_price < 1100:
         pushNotification(price)
         #updateFile(price)
-        #sendMail()
+        #sendMail(price)
     #print(converted_price)
     #print(title.strip())
 
@@ -46,7 +47,7 @@ def pushNotification(price):
     notify = ToastNotifier()
     notify.show_toast('Price Drop!', 'Price is now ' + str(price), duration=10)
 
-def sendMail():
+def sendMail(price):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
@@ -54,7 +55,7 @@ def sendMail():
     
     server.login('', '') # Username and Password
 
-    subject = 'Price fell down'
+    subject = 'Price is now ' + price
     body = 'Check  ' + URL
 
     msg = f'Subject: {subject}\n\n{body}'

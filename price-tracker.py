@@ -28,17 +28,19 @@ def checkPrice():
 
     soup = BeautifulSoup(page.content, 'html.parser')
 
+    title = soup.find(id='productTitle').get_text().strip()
+
     price = soup.find(id='priceblock_ourprice').get_text()
     converted_price = eval(price[4:9]) # Number part of price (returns tuple split on commas)
     #price = eval(soup.find_all('span', class_='total--sale-price')[0].contents[0])  #for span elements
     converted_price = converted_price[0]*1000 + converted_price[1] #converts tuple to numeric
 
     if converted_price < reqPrice:
-        pushNotification(price)
+        pushNotification(price, title)
         #updateFile(price)
         #sendMail(price)
     #print(converted_price)
-    #print(title.strip())
+    #print(title)
 
 def updateFile(price):
     now = datetime.now()
@@ -47,9 +49,9 @@ def updateFile(price):
     file.write('Price: ' + str(price) + ', ' + dt_string)
     file.close()
 
-def pushNotification(price):
+def pushNotification(price, title):
     notify = ToastNotifier()
-    notify.show_toast('Price Drop!', 'Price is now ' + str(price), duration=10)
+    notify.show_toast('Price Drop for '+ title + '!', 'Price is now ' + str(price), duration=10)
 
 def sendMail(price):
     server = smtplib.SMTP('smtp.gmail.com', 587)

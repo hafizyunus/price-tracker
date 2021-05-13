@@ -17,6 +17,8 @@ from win10toast import ToastNotifier
 
 checkRate = 3
 
+reqPrice = 1000
+
 URL = '' # Product link
 
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'}
@@ -27,11 +29,11 @@ def checkPrice():
     soup = BeautifulSoup(page.content, 'html.parser')
 
     price = soup.find(id='priceblock_ourprice').get_text()
-    converted_price = eval(price[4:9]) # Number part of price
-    #price = eval(soup.find_all('span', class_='total--sale-price')[0].contents[0])  for span elements
-    converted_price = converted_price[0]*1000 + converted_price[1]
+    converted_price = eval(price[4:9]) # Number part of price (returns tuple split on commas)
+    #price = eval(soup.find_all('span', class_='total--sale-price')[0].contents[0])  #for span elements
+    converted_price = converted_price[0]*1000 + converted_price[1] #converts tuple to numeric
 
-    if converted_price < 1100:
+    if converted_price < reqPrice:
         pushNotification(price)
         #updateFile(price)
         #sendMail(price)

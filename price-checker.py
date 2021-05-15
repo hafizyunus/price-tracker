@@ -8,6 +8,7 @@ from tkinter import ttk, BOTH, Menu, RIGHT, CENTER, LEFT, W, E, N, S, TclError, 
 from ttkthemes import ThemedTk
 
 import requests
+from datetime import datetime
 from bs4 import BeautifulSoup
 
 class priceCheck:
@@ -41,23 +42,26 @@ class priceCheck:
 
         # ***** Main Window *****
 
+        self.dateTime = ttk.Label(self.mainFrame, text=self.get_dateTime(), style='TLabel', justify=CENTER, anchor=W)
+        self.dateTime.grid(row=1, column=1, padx=5, pady=10, sticky=W+E+N+S)
+
         self.name = ttk.Label(self.mainFrame, text=self.get_title(URL, headers), style='TLabel', justify=CENTER, anchor=CENTER)
-        self.name.grid(row=1, column=1, padx=5, pady=5, sticky=W+E+N+S)
+        self.name.grid(row=2, column=1, padx=5, pady=5, sticky=W+E+N+S)
 
         self.price = ttk.Label(self.mainFrame, text=self.get_price(URL, headers), style='TLabel', justify=CENTER, anchor=CENTER)
-        self.price.grid(row=2, column=1, padx=5, pady=5, sticky=W+E+N+S)
+        self.price.grid(row=3, column=1, padx=5, pady=5, sticky=W+E+N+S)
 
         self.update = ttk.Button(self.mainFrame, text='Update', style='TButton', command=lambda: self.updatePrice(URL, headers), width=15)
-        self.update.grid(row=3, column=1, padx=5, pady=5, sticky=W+E+N+S)
+        self.update.grid(row=4, column=1, padx=5, pady=5, sticky=W+E+N+S)
 
         self.quit = ttk.Button(self.mainFrame, text='Quit', style='S.TButton', command=master.destroy, width=4)
-        self.quit.grid(row=4, column=1, padx=5, pady=20)
+        self.quit.grid(row=5, column=1, padx=5, pady=20)
 
         self.lSpace = ttk.Label(self.mainFrame, width=1)
-        self.lSpace.grid(row=0, column=0, pady=35)
+        self.lSpace.grid(row=0, column=0, pady=0)
 
         self.rSpace = ttk.Label(self.mainFrame, width=1)
-        self.rSpace.grid(row=5, column=3, pady=0)
+        self.rSpace.grid(row=6, column=3, pady=0)
 
     # ***** Functions *****
 
@@ -79,6 +83,11 @@ class priceCheck:
         #price = eval(soup.find_all('span', class_='total--sale-price')[0].contents[0])  #for span elements
         converted_price = converted_price[0]*1000 + converted_price[1] #converts tuple to numeric
         return converted_price
+
+    def get_dateTime(self):
+        now = datetime.now()
+        dateTime = now.strftime("%d/%m/%Y %H:%M:%S")
+        return dateTime
 
     def updatePrice(self, URL, headers):
         title = self.get_title(URL, headers)

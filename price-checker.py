@@ -92,7 +92,9 @@ class priceCheck:
     def updatePrice(self, URL, headers):
         title = self.get_title(URL, headers)
         price = self.get_price(URL, headers)
+        dateTime = self.get_dateTime()
 
+        self.dateTime.config(text=dateTime)
         self.name.config(text=title)
         self.price.config(text=price)
 
